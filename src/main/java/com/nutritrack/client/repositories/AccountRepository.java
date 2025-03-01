@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface AccountRepository extends JpaRepository <Account, Long> {
+public interface AccountRepository extends JpaRepository <Account, String> {
     // Custom Query: Find accounts by first name
 //    @Query("SELECT a FROM Account a WHERE a.firstName = :firstName")
 //    List<Account> findAccountsByFirstName(@Param("firstName") String firstName);

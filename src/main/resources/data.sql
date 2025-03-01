@@ -13,7 +13,7 @@ CREATE TABLE accounts(
                               created_on       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                               updated_on       TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                               last_login       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                              logged_in        TINYINT(0) DEFAULT 0
+                              logged_in        TINYINT(1) DEFAULT 0
 );
 
 
@@ -23,8 +23,10 @@ CREATE TABLE profiles (
                           first_name VARCHAR(255), -- Full name or display name
                           last_name VARCHAR(255),
                           date_of_birth DATE, -- Optional, for additional info
-                          gender ENUM('male', 'female'),
-                          height VARCHAR(30),
-                          weight DECIMAL(3,1),
-                          FOREIGN KEY (account_uid) REFERENCES accounts(uid) ON DELETE CASCADE
+                          gender ENUM('male', 'female', 'other'),
+                          height DECIMAL(4,1),
+                          weight DECIMAL(5,2), 
+                          unit_system ENUM('metric', 'imperial') DEFAULT 'metric',
+                          FOREIGN KEY (account_uid) REFERENCES accounts(uid) ON DELETE CASCADE,
+                          INDEX idx_account_uid (account_uid)
 );
