@@ -1,21 +1,26 @@
 package com.nutritrack.client.controllers;
+import java.time.LocalDate;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import com.nutritrack.client.dto.CreateAccountRequestDTO;
-import com.nutritrack.client.dto.LoginRequestDTO;
 import com.nutritrack.client.models.Account;
 import com.nutritrack.client.models.Profile;
 import com.nutritrack.client.services.AccountService;
 import com.nutritrack.client.services.FatSecretTokenService;
 import com.nutritrack.client.services.ProfileService;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import java.time.LocalDate;
-import java.util.Map;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @author Diego Dominguez
@@ -57,8 +62,6 @@ public class AccountController {
      */
     @PostMapping("/public/create")
     public ResponseEntity<?> createAccount(@RequestBody CreateAccountRequestDTO request) {
-        String accessToken = tokenService.getAccessToken();
-        System.out.println(accessToken);
         // Validate input
         if (request.getUid() == null || request.getEmail() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("UID and Email are required.");
@@ -130,8 +133,7 @@ public class AccountController {
      */
     @PutMapping("/secure/logout")
     public ResponseEntity<String> logout(
-            HttpServletRequest request,
-            @RequestBody Map<String, Boolean> requestBody) {
+            HttpServletRequest request) {
         try {
             // Get uid that was set by middleware
             String uid = (String) request.getAttribute("uid");
@@ -146,5 +148,28 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token.");
         }
     }
+
+        /**
+     * Handles GET requests to retrieve an account based on the authenticated user's UID.
+     *
+     * @param request The {@link HttpServletRequest} containing the user's UID as an attribute.
+     * @return A {@link ResponseEntity} containing the {@link Account} if found,
+     *         {@code 404 NOT FOUND} if the account does not exist, or
+     *         {@code 401 UNAUTHORIZED} if an error occurs.
+     */
+    @GetMapping("/secure")
+    public ResponseEntity<Account> getAccount(
+            HttpServletRequest request){
+                try {
+                    String uid = (String) request.getAttribute("uid");
+                    Account account = accountService.getAccount(uid);
+                    if (account == null){
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                    }
+                    return ResponseEntity.ok(account); 
+                } catch (Exception e) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+                }
+            }
 
 }

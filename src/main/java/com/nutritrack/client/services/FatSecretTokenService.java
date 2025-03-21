@@ -1,11 +1,8 @@
 package com.nutritrack.client.services;
 
 import java.time.Duration;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.nutritrack.client.dto.FatSecretTokenResponse;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.nutritrack.client.dto.FatSecretTokenResponse;
 
 @Service
 public class FatSecretTokenService {
@@ -54,7 +53,7 @@ public class FatSecretTokenService {
         formData.add("grant_type", "client_credentials");
         formData.add("client_id", clientId);
         formData.add("client_secret", clientSecret);
-        formData.add("scope", "basic barcode premier localization");
+        formData.add("scope", "basic barcode premier");
 
         FatSecretTokenResponse tokenResponse = webClient.post()
                 .uri(tokenUrl)

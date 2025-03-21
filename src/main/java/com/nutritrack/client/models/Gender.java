@@ -9,3 +9,5 @@ package com.nutritrack.client.models;
 public enum Gender {
     male, female, other
 }
+
+

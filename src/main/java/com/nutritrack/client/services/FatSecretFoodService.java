@@ -2,15 +2,18 @@ package com.nutritrack.client.services;
 
 import java.time.Duration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nutritrack.client.dto.FatSecretFoodIdResponse;
-import com.nutritrack.client.models.FatSecretFood;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nutritrack.client.dto.FatSecretFoodIdResponse;
+import com.nutritrack.client.dto.FoodAutocompleteResponse;
+import com.nutritrack.client.models.FatSecretFood;
+import com.nutritrack.client.models.FatSecretFoodSearchResponse;
 
 @Service
 public class FatSecretFoodService {
@@ -49,9 +52,13 @@ public class FatSecretFoodService {
         FatSecretFood foodDetails = getFoodDetails(foodId);
 
         // Cache the food details for future requests (e.g., for 24 hours)
+        if (foodDetails.getFood() != null) {
         String foodJsonToCache = mapper.writeValueAsString(foodDetails);
         redisTemplate.opsForValue().set("food:" + barcode, foodJsonToCache, Duration.ofHours(24));
         System.out.println("RETURNED FOOD FROM FATSECRET API: " + foodJsonToCache);
+        }   else {
+            throw new RuntimeException("Failed to fetch food details for barcod: " + barcode);
+        }
         return foodDetails;
     }
 
@@ -74,7 +81,7 @@ public class FatSecretFoodService {
     }
 
     // Calls the food.get endpoint to retrieve detailed food information.
-    private FatSecretFood getFoodDetails(String foodId) {
+    public FatSecretFood getFoodDetails(String foodId) {
         String url = apiBaseUrl + "/v4?food_id=" + foodId + "&format=json&include_food_images=true&flag_default_serving=true";
         String accessToken = tokenService.getAccessToken();
 
@@ -92,6 +99,38 @@ public class FatSecretFoodService {
         return foodDetails;
     }
 
+/**
+     * Retrieves food suggestions with fatsecret API
+     * @param query String
+     */
+    public FoodAutocompleteResponse getAutoCompleteSuggestion(String query){
+        String url = apiBaseUrl + "/autocomplete/v2?expression=" + query + "&max_results=10&format=json";
+        String accessToken = tokenService.getAccessToken();
+
+        FoodAutocompleteResponse responseEntity = webClient.get()
+                        .uri(url)
+                        .header("Authorization", "Bearer " + accessToken)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .retrieve()
+                        .bodyToMono(FoodAutocompleteResponse.class)
+                        .block();
+        return responseEntity;
+    }
+
+
+    public FatSecretFoodSearchResponse search(String query){
+        String url = apiBaseUrl + "s/search/v1?search_expression=" + query + "&format=json&max_results=10";
+        String accessToken = tokenService.getAccessToken();
+
+        FatSecretFoodSearchResponse foods = webClient.get()
+                         .uri(url)
+                        .header("Authorization", "Bearer " + accessToken)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .retrieve()
+                        .bodyToMono(FatSecretFoodSearchResponse.class)
+                        .block();
+        return foods;
+    }
 
 
 }

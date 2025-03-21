@@ -1,10 +1,10 @@
 package com.nutritrack.client.services;
+import org.springframework.stereotype.Service;
+
 import com.nutritrack.client.models.Account;
 import com.nutritrack.client.models.Profile;
 import com.nutritrack.client.repositories.AccountRepository;
 import com.nutritrack.client.repositories.ProfileRepository;
-import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 /**
  * @author Diego Dominguez
@@ -49,6 +49,17 @@ public class AccountService {
         }
     }
 
+     /**
+     * Retrieves an account by its unique identifier (UID).
+     *
+     * @param uid The unique identifier of the account.
+     * @return The {@link Account} object if found, otherwise {@code null}.
+     * @throws RuntimeException If an error occurs during retrieval.
+     */
+    public Account getAccount(String uid){
+        return accountRepository.findById(uid).orElse(null);
+     }
+
     /**
      * Logs out a user by updating their login status in the database.
      *
@@ -56,11 +67,9 @@ public class AccountService {
      * @return boolean True if the logout was successful, false if the account was not found.
      */
     public boolean logUserOut(String uid){
-        Optional<Account> userAccount = accountRepository.findById(uid);
-        if (userAccount.isPresent()) {
-            Account account = userAccount.get();
-
-                account.setLoggedIn(false);
+        Account account = getAccount(uid);
+        if (account != null) {
+            account.setLoggedIn(false);
 
             // NOTE: MAYBE PUT THIS IN REPO
             accountRepository.save(account);
@@ -69,15 +78,18 @@ public class AccountService {
         return false;
     }
 
+
+
     public boolean logUserIn(String uid){
-        Optional<Account> userAccount = accountRepository.findById(uid);
-        if (userAccount.isPresent()) {
-            Account account = userAccount.get();
+        Account account = getAccount(uid);
+        if (account != null) {
             account.setLoggedIn(true);
             accountRepository.save(account);
             return true;
         }
         return false;
     }
+
+   
 
 }

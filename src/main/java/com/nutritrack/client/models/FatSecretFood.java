@@ -1,9 +1,10 @@
 package com.nutritrack.client.models;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FatSecretFood {
@@ -32,6 +33,8 @@ public class FatSecretFood {
         private FoodImages foodImages;
         @JsonProperty("servings")
         private Servings servings;
+        @JsonProperty("brand_name")
+        private String brandName;
 
         public String getFoodId() {
             return foodId;
@@ -68,6 +71,12 @@ public class FatSecretFood {
         }
         public void setServings(Servings servings) {
             this.servings = servings;
+        }
+        public String getBrandName(){
+            return brandName;
+        }
+        public void setBrandName(String brandName){
+            this.brandName = brandName;
         }
     }
 
