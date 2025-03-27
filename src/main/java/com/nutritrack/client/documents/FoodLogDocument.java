@@ -1,164 +1,95 @@
 package com.nutritrack.client.documents;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.OffsetDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-
-import com.nutritrack.client.models.FoodLogEntry;
-import com.nutritrack.client.models.MealType;
 
 @Document(collection = "food_log")
 public class FoodLogDocument {
 
     @Id
-    private String id; 
-    private String accountUid;
-    private String mealId;
-    private String mealName;
-    private BigDecimal totalCalories;
-    private BigDecimal quantity;
-    private MealType mealType;
-    private LocalDateTime logDate;
-    private LocalDateTime updatedAt;
+    private String id;              // MongoDB's ObjectId as String
+    private Integer dailyLogId; 
+    private String accountId;   
+    private OffsetDateTime created;  
+    private OffsetDateTime updated;
+    
+    private MealCategory breakfast;
+    private MealCategory lunch;
+    private MealCategory dinner;
+    private MealCategory snacks;
 
-    @Field("breakfastLog")
-    private List<FoodLogEntry> breakfastLog;
-    @Field("lunchLog")
-    private List<FoodLogEntry> lunchLog;
-    @Field("dinnerLog")
-    private List<FoodLogEntry> dinnerLog;
-    @Field("snackLog")
-    private List<FoodLogEntry> snackLog;
-
-    // Constructors
     public FoodLogDocument() {
     }
 
-    // Getters and setters
+    // Getters and Setters
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
-
-    public String getAccountUid() {
-        return accountUid;
+    public Integer getDailyLogId() {
+        return dailyLogId;
     }
-
-    public void setAccountUid(String accountUid) {
-        this.accountUid = accountUid;
+    public void setDailyLogId(Integer dailyLogId) {
+        this.dailyLogId = dailyLogId;
     }
-
-    public String getMealId() {
-        return mealId;
+    public String getAccoundId(){
+        return accountId;
     }
-
-    public void setMealId(String mealId) {
-        this.mealId = mealId;
+    public void setAccountId(String accountId){
+        this.accountId = accountId;
     }
-
-    public String getMealName() {
-        return mealName;
+    public OffsetDateTime getCreated() {
+        return created;
     }
-
-    public void setMealName(String mealName) {
-        this.mealName = mealName;
+    public void setCreated(OffsetDateTime created) {
+        this.created = created;
     }
-
-    public BigDecimal getTotalCalories() {
-        return totalCalories;
+    public OffsetDateTime getUpdated() {
+        return updated;
     }
-
-    public void setTotalCalories(BigDecimal totalCalories) {
-        this.totalCalories = totalCalories;
+    public void setUpdated(OffsetDateTime updated) {
+        this.updated = updated;
     }
-
-    public BigDecimal getQuantity() {
-        return quantity;
+    public MealCategory getBreakfast() {
+        return breakfast;
     }
-
-    public void setQuantity(BigDecimal quantity) {
-        this.quantity = quantity;
+    public void setBreakfast(MealCategory breakfast) {
+        this.breakfast = breakfast;
     }
-
-    public MealType getMealType() {
-        return mealType;
+    public MealCategory getLunch() {
+        return lunch;
     }
-
-    public void setMealType(MealType mealType) {
-        this.mealType = mealType;
+    public void setLunch(MealCategory lunch) {
+        this.lunch = lunch;
     }
-
-    public LocalDateTime getLogDate() {
-        return logDate;
+    public MealCategory getDinner() {
+        return dinner;
     }
-
-    public void setLogDate(LocalDateTime logDate) {
-        this.logDate = logDate;
+    public void setDinner(MealCategory dinner) {
+        this.dinner = dinner;
     }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public MealCategory getSnacks() {
+        return snacks;
     }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public List<FoodLogEntry> getBreakfastLog() {
-        return breakfastLog;
-    }
-
-    public void setBreakfastLog(List<FoodLogEntry> breakfastLog) {
-        this.breakfastLog = breakfastLog;
-    }
-
-    public List<FoodLogEntry> getLunchLog() {
-        return lunchLog;
-    }
-
-    public void setLunchLog(List<FoodLogEntry> lunchLog) {
-        this.lunchLog = lunchLog;
-    }
-
-    public List<FoodLogEntry> getDinnerLog() {
-        return dinnerLog;
-    }
-
-    public void setDinnerLog(List<FoodLogEntry> dinnerLog) {
-        this.dinnerLog = dinnerLog;
-    }
-
-    public List<FoodLogEntry> getSnackLog() {
-        return snackLog;
-    }
-
-    public void setSnackLog(List<FoodLogEntry> snackLog) {
-        this.snackLog = snackLog;
+    public void setSnacks(MealCategory snacks) {
+        this.snacks = snacks;
     }
 
     @Override
     public String toString() {
-        return "FoodLogDocument{" +
+        return "DailyFoodLogDocument{" +
                 "id='" + id + '\'' +
-                ", accountUid='" + accountUid + '\'' +
-                ", mealId='" + mealId + '\'' +
-                ", mealName='" + mealName + '\'' +
-                ", totalCalories=" + totalCalories +
-                ", quantity=" + quantity +
-                ", mealType=" + mealType +
-                ", logDate=" + logDate +
-                ", updatedAt=" + updatedAt +
-                ", breakfastLog=" + breakfastLog +
-                ", lunchLog=" + lunchLog +
-                ", dinnerLog=" + dinnerLog +
-                ", snackLog=" + snackLog +
+                ", dailyLogId='" + dailyLogId + '\'' +
+                ", created=" + created +
+                ", updated=" + updated +
+                ", breakfast=" + breakfast +
+                ", lunch=" + lunch +
+                ", dinner=" + dinner +
+                ", snacks=" + snacks +
                 '}';
     }
 }

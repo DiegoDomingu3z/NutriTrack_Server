@@ -52,6 +52,7 @@ public class FirebaseService {
         try {
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
             System.out.println("TOKEN VERIFIED: " + decodedToken.getUid());
+            System.out.println(idToken);
             return decodedToken.getUid(); // Extract the UID
         } catch (Exception e) {
             System.out.println("CURCIAL ERROR:" + e);

@@ -1,12 +1,24 @@
 package com.nutritrack.client.models;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
 import java.math.BigDecimal;
 import java.sql.Types;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UuidGenerator;
+
+import com.google.api.client.util.DateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 /**
  * @author Diego Dominguez
@@ -56,6 +68,13 @@ public class Profile {
     @Enumerated(EnumType.STRING)
     @Column(name = "unit_system")
     private UnitSystem unitSystem = UnitSystem.metric; // User's measurement preference.
+
+     @Column(name = "createdOn", nullable = false)
+    private DateTime createdOn;
+
+    @Column(name = "updatedOn", nullable = false)
+    private DateTime updatedOn;
+
 
     /**
      * Default constructor for Profile.
@@ -227,6 +246,23 @@ public class Profile {
      */
     public void setUnitSystem(UnitSystem unitSystem) {
         this.unitSystem = unitSystem;
+    }
+
+
+    public DateTime getCreatedOn(){
+        return createdOn;
+    }
+
+    public void setCreatedOn(DateTime date){
+        this.createdOn = date;
+    }
+
+    public DateTime getUpdatedOn(){
+        return updatedOn;
+    }
+
+    public void setUpdatedOn(DateTime date){
+        this.updatedOn = date;
     }
 
     /**

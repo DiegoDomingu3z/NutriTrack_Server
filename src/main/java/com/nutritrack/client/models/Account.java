@@ -1,6 +1,13 @@
 package com.nutritrack.client.models;
 
-import jakarta.persistence.*;
+
+
+import java.time.OffsetDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
  * @author Diego Dominguez
@@ -22,6 +29,12 @@ public class Account {
 
     @Column(name = "logged_in", nullable = false)
     private boolean loggedIn;
+
+    @Column(name = "createdOn", nullable = false)
+    private OffsetDateTime createdOn;
+
+    @Column(name = "updatedOn", nullable = false)
+    private OffsetDateTime updatedOn;
 
     /**
      * Gets the unique identifier (UID) of the account.
@@ -75,6 +88,22 @@ public class Account {
      */
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
+    }
+
+    public OffsetDateTime getCreatedOn(){
+        return createdOn;
+    }
+
+    public void setCreatedOn(OffsetDateTime date){
+        this.createdOn = date;
+    }
+
+    public OffsetDateTime getUpdatedOn(){
+        return updatedOn;
+    }
+
+    public void setUpdatedOn(OffsetDateTime date){
+        this.updatedOn = date;
     }
 
     /**

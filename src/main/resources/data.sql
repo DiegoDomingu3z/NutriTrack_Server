@@ -49,8 +49,20 @@ CREATE TABLE goal_progress (
     INDEX idx_goal_id (goal_id)
 );
 
+
+
+CREATE TABLE daily_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    account_uid VARCHAR(255) NOT NULL,
+    log_date DATE NOT NULL,
+    UNIQUE (account_uid, log_date)
+    -- You can add other metadata fields if needed
+);
+
+
 CREATE TABLE food_log (
-    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    daily_log_id INT NOT NULL, 
     account_uid VARCHAR(255) NOT NULL,         -- Foreign key to user's account
     food_id VARCHAR(255) NOT NULL,              -- Reference ID for the meal
     food_name VARCHAR(255) NOT NULL,
@@ -61,7 +73,9 @@ CREATE TABLE food_log (
     meal_type ENUM('breakfast', 'lunch', 'dinner', 'snack') NOT NULL,
     log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,                     -- Date the meal was logged
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (account_uid) REFERENCES accounts(uid) ON DELETE CASCADE,
+     FOREIGN KEY (account_uid) REFERENCES accounts(uid) ON DELETE CASCADE,
+    FOREIGN KEY (daily_log_id) REFERENCES daily_log(id) ON DELETE CASCADE,
     INDEX idx_log_date (log_date), 
-    INDEX idx_meal_id (meal_id)
+    INDEX idx_meal_id (meal_id),
+    INDEX idx_daily_log_id (daily_log_id)
 );

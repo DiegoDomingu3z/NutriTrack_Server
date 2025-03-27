@@ -28,7 +28,7 @@ public class FatSecretFoodController {
      * GET /api/food/secure/barcode/find-by-id?barcode=XYZ
      * Returns the food details corresponding to the scanned barcode.
      */
-    @GetMapping("/secure/barcode/find-by-id")
+    @GetMapping("/public/barcode/find-by-id")
     public ResponseEntity<?> GetFoodByBarcode(@RequestParam("barcode") String barcode) {
         if (barcode == null || barcode.trim().isEmpty()) {
             return ResponseEntity.badRequest().body("Barcode parameter is missing or empty");
@@ -57,7 +57,7 @@ public class FatSecretFoodController {
         }
     }
 
-    @GetMapping("/secure/search")
+    @GetMapping("/public/search")
     public ResponseEntity<?> searchFood(@RequestParam("query") String query){
         try {
             if (query == null || query.trim().isEmpty()){
@@ -71,7 +71,7 @@ public class FatSecretFoodController {
         }
     }
 
-    @GetMapping("/secure/find-one")
+    @GetMapping("/public/find-one")
     public ResponseEntity<?> GetFoodById(@RequestParam("id") String id){
         try {
             if (id == null || id.trim().isEmpty()){
